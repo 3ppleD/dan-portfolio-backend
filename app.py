@@ -6,7 +6,7 @@ import cloudinary
 
 
 app = Flask(__name__)
-CORS(app, resources={r"/api/*": {"origins": "http://localhost:5173"}})
+CORS(app, resources={r"/api/*": {"origins": "https://dan-portfolio-backend.onrender.com"}})
 
 # @app.after_request
 # def after_request(response):
