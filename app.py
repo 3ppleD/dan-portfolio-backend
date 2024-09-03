@@ -6,7 +6,7 @@ import cloudinary
 
 
 app = Flask(__name__)
-CORS(app, resources={r"/api/*": {"origins": "https://dan-portfolio-backend.onrender.com"}})
+CORS(app, resources={r"/api/*": {"origins": "https://portfolio-frontend-git-main-3ppleds-projects.vercel.app"}})
 
 cloudinary.config(
     cloud_name="dosvdonf0",
@@ -18,9 +18,7 @@ cloudinary.config(
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///MyPortfolioDB.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SECRET_KEY'] = 'mysecretkey'
-# app.config['DBHUB_API_KEY'] = 'XdPOtCf7emmaTY4shQszPYI5V9E9ID282jjBcmFWM5_49NUKLgsz4A'
-# app.config['DBHUB_DB_NAME'] = 'MyPortfolioDB.db'
-# # app.config['DBHUB_USERNAME'] = 'your_dbhub_username' 
+ 
 
 
 db = SQLAlchemy(app)
