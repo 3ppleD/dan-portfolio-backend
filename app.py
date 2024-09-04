@@ -6,7 +6,7 @@ import cloudinary
 
 
 app = Flask(__name__)
-CORS(app, resources={r"/api/*": {"origins": "https://portfolio-frontend-git-main-3ppleds-projects.vercel.app"}})
+CORS(app, resources={r"/api/*": {"origins": "https://dan-portfolio-backend.onrender.com"}})
 
 cloudinary.config(
     cloud_name="dosvdonf0",
