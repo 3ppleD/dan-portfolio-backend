@@ -1,5 +1,5 @@
 from app import db
-from flask import jsonify, request, session, Blueprint
+from flask import jsonify, request, session, Blueprint, make_response
 from model.portfolioModel import Intro, About, Experience, Project, Contact
 import cloudinary.uploader
 
@@ -7,11 +7,27 @@ import cloudinary.uploader
 port_bp = Blueprint ("port_bp", __name__)
 
 #Getting endpont for intro
+# @port_bp.route('/api/portfolio/intros', methods=['GET'])
+# def get_intro():
+#     intros = Intro.query.all()
+#     result = [intro.to_dict() for intro in intros]
+#     return jsonify(result)
+from flask import jsonify, make_response
+
 @port_bp.route('/api/portfolio/intros', methods=['GET'])
 def get_intro():
     intros = Intro.query.all()
     result = [intro.to_dict() for intro in intros]
-    return jsonify(result)
+    
+  
+    response = make_response(jsonify(result))
+    
+
+    response.headers['Cache-Control'] = 'no-store, no-cache, must-revalidate, max-age=0'
+    response.headers['Pragma'] = 'no-cache'
+    response.headers['Expires'] = '0'
+
+    return response
 
 
 
