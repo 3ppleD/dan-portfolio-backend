@@ -1,6 +1,6 @@
 from app import db
 from sqlalchemy.exc import SQLAlchemyError
-from flask import jsonify, request, session, Blueprint, make_response
+from flask import jsonify, request, session, Blueprint
 from model.portfolioModel import Intro, About, Experience, Project, Contact
 import cloudinary.uploader
 
@@ -87,10 +87,10 @@ def update_intro():
         if "description" in data:
             intros.description = data["description"]
 
-        db.session.add(intros)  # Explicitly add the object to the session
+        db.session.add(intros)  
         db.session.commit()
         
-        # Refresh the object to ensure we have the latest data
+
         db.session.refresh(intros)
         
         return jsonify({"message": "Intro updated successfully", "data": intros.to_dict()})
