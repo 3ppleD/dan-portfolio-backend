@@ -1,4 +1,5 @@
 from app import db
+from sqlalchemy.exc import SQLAlchemyError
 from flask import jsonify, request, session, Blueprint, make_response
 from model.portfolioModel import Intro, About, Experience, Project, Contact
 import cloudinary.uploader
@@ -43,28 +44,63 @@ def create_intro():
 
 
 # updateing endpoint for into
+# @port_bp.route("/api/portfolio/intros/", methods=['PUT'])
+# def update_intro():
+#     try:
+#         intros = Intro.query.first() 
+#         if intros is None:
+#             return jsonify({"error":"Intro not found"}), 404
+
+#         data = request.get_json()
+        
+#         intros.welcomeText = data.get("welcomeText", intros.welcomeText)
+#         intros.firstName = data.get("firstName", intros.firstName)
+#         intros.lastName = data.get("lastName", intros.lastName)
+#         intros.caption = data.get("caption", intros.caption)
+#         intros.description = data.get("description", intros.description)
+
+#         db.session.commit()
+#         return jsonify({"message": "Intro updated successfully", "data": intros.to_dict()})
+
+#     except Exception as e:
+#         db.session.rollback()
+#         return jsonify({"error": str(e)}), 500
+
 @port_bp.route("/api/portfolio/intros/", methods=['PUT'])
 def update_intro():
     try:
         intros = Intro.query.first() 
         if intros is None:
-            return jsonify({"error":"Intro not found"}), 404
+            return jsonify({"error": "Intro not found"}), 404
 
         data = request.get_json()
         
-        intros.welcomeText = data.get("welcomeText", intros.welcomeText)
-        intros.firstName = data.get("firstName", intros.firstName)
-        intros.lastName = data.get("lastName", intros.lastName)
-        intros.caption = data.get("caption", intros.caption)
-        intros.description = data.get("description", intros.description)
+        # Update fields only if they are present in the request
+        if "welcomeText" in data:
+            intros.welcomeText = data["welcomeText"]
+        if "firstName" in data:
+            intros.firstName = data["firstName"]
+        if "lastName" in data:
+            intros.lastName = data["lastName"]
+        if "caption" in data:
+            intros.caption = data["caption"]
+        if "description" in data:
+            intros.description = data["description"]
 
+        db.session.add(intros)  # Explicitly add the object to the session
         db.session.commit()
+        
+        # Refresh the object to ensure we have the latest data
+        db.session.refresh(intros)
+        
         return jsonify({"message": "Intro updated successfully", "data": intros.to_dict()})
 
+    except SQLAlchemyError as e:
+        db.session.rollback()
+        return jsonify({"error": f"Database error: {str(e)}"}), 500
     except Exception as e:
         db.session.rollback()
-        return jsonify({"error": str(e)}), 500
-    
+        return jsonify({"error": f"Unexpected error: {str(e)}"}), 500   
 
     
 
